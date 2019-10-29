@@ -8,9 +8,8 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@azure/core-lro": "file:../../azure-core-lro-1.0.0.tgz",
     "@azure/storage-blob": "file:../../azure-storage-blob-12.0.0-preview.5.tgz"
   },
-  "dependencies": {
-    "@azure/core-lro": "file:../../azure-core-lro-1.0.0-preview.2.tgz"
-  }
+  "dependencies": {}
 }
