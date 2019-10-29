@@ -1,17 +1,19 @@
-import { BlobServiceClient } from "@azure/storage-blob";
+import { BlobServiceClient, ContainerItem } from "@azure/storage-blob";
 
 function getServiceSasUrl() {
     return (document.getElementById("serviceSasUrl") as HTMLInputElement).value;
 }
 
-function showContainerList(containers) {
+function showContainerList(containers: ContainerItem[]) {
     const outputEl = document.getElementById("output");
-    // empty previous output
-    outputEl.textContent = "";
-    for (const container of containers) {
-        const containerDiv = document.createElement("div");
-        containerDiv.textContent = container.name;
-        outputEl.appendChild(containerDiv);
+    if (outputEl) {
+        // empty previous output
+        outputEl.textContent = "";
+        for (const container of containers) {
+            const containerDiv = document.createElement("div");
+            containerDiv.textContent = container.name;
+            outputEl.appendChild(containerDiv);
+        }
     }
 }
 
@@ -27,5 +29,7 @@ async function listContainers() {
 
 window.addEventListener("DOMContentLoaded", () => {
     const listContainersButton = document.getElementById("listContainers");
-    listContainersButton.addEventListener("click", () => listContainers());
+    if (listContainersButton) {
+        listContainersButton.addEventListener("click", () => listContainers());
+    }
 });

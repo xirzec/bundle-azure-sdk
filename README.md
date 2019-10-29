@@ -58,10 +58,10 @@ Follow the prompts and npm will generate a starter [package.json](https://docs.n
 
 Now we can install the Azure SDK. The Azure SDK is composed of many separate packages, but you can pick and choose which you need based on the services you intend to use.
 
-For example, if you wish to use the Blob functionality provided by Azure's Storage service, you can install the `@Azure/storage-blob` package:
+For example, if you wish to use the Blob functionality provided by Azure's Storage service, you can install the `@azure/storage-blob` package:
 
 ```
-npm --save-dev @Azure/storage-blob@latest
+npm --save-dev @azure/storage-blob@latest
 ```
 
 `--save-dev` is used to save the package as a "[dev dependency](https://docs.npmjs.com/files/package.json#devdependencies)", meaning it only needs to be installed when building your website. 
@@ -121,8 +121,75 @@ If you want to customize the name or location of your input file, the bundled fi
 
 ### Webpack with TypeScript
 
+First, you need to install [TypeScript](https://typescriptlang.org) and a [Webpack loader](https://webpack.js.org/loaders/) for TypeScript:
+
 ```
-TODO: example here
+npm install --save-dev typescript ts-loader
+```
+
+Now let's create a very basic [tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file to configure TypeScript:
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "strict": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es6"
+  }
+}
+```
+
+For more information on using Webpack with TypeScript, check out the TypeScript guide in Webpack's documentation: https://webpack.js.org/guides/typescript/
+
+Similar to our JS example above, let's create an `index.ts` file that imports from `@azure/storage-blob`:
+
+```ts
+// src\index.ts
+import { BlobServiceClient } from "@azure/storage-blob";
+// Now do something interesting with BlobServiceClient :)
+```
+
+The last step we need to perform before we can run `webpack` and produce bundled output is set up a basic `webpack.config.js` file:
+
+```js
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.ts',
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts'],
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+```
+
+Now you are able to invoke webpack on the command-line:
+
+```
+webpack --mode=development
+```
+
+This will create a **bundled** version of your code plus the Azure SDK functionality that your code depends on and write it out to a `dist` subfolder inside a file named `bundle.js` (as configured in `webpack.config.js`.)
+
+Now you are able to use this bundled output file inside an html page via a script tag:
+
+```html
+<script src="./dist/bundle.js"></script>
 ```
 
 ## Using Rollup

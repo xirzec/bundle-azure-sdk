@@ -9,7 +9,9 @@
   "license": "MIT",
   "devDependencies": {
     "@azure/core-lro": "file:../../azure-core-lro-1.0.0.tgz",
-    "@azure/storage-blob": "file:../../azure-storage-blob-12.0.0-preview.5.tgz"
+    "@azure/storage-blob": "file:../../azure-storage-blob-12.0.0-preview.5.tgz",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.6.4"
   },
   "dependencies": {}
 }
