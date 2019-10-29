@@ -1,4 +1,4 @@
-const BlobServiceClient = require("@azure/storage-blob").BlobServiceClient;
+const { BlobServiceClient } = require("@azure/storage-blob");
 
 function getServiceSasUrl() {
     return document.getElementById("serviceSasUrl").value;
