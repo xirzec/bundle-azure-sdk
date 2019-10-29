@@ -1,7 +1,7 @@
-const { BlobServiceClient } = require("@azure/storage-blob");
+import { BlobServiceClient } from "@azure/storage-blob";
 
 function getServiceSasUrl() {
-    return document.getElementById("serviceSasUrl").value;
+    return (document.getElementById("serviceSasUrl") as HTMLInputElement).value;
 }
 
 function showContainerList(containers) {
@@ -17,9 +17,8 @@ function showContainerList(containers) {
 
 async function listContainers() {
     const blobServiceClient = new BlobServiceClient(getServiceSasUrl());
-    let iter = await blobServiceClient.listContainers();
     const containers = [];
-    for await (const container of iter) {
+    for await (const container of  blobServiceClient.listContainers()) {
         containers.push(container);
     }
     showContainerList(containers);
