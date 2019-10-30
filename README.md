@@ -61,7 +61,7 @@ Now we can install the Azure SDK. The Azure SDK is composed of many separate pac
 For example, if you wish to use the Blob functionality provided by Azure's Storage service, you can install the `@azure/storage-blob` package:
 
 ```
-npm --save-dev @azure/storage-blob@latest
+npm install --save-dev @azure/storage-blob@latest
 ```
 
 `--save-dev` is used to save the package as a "[dev dependency](https://docs.npmjs.com/files/package.json#devdependencies)", meaning it only needs to be installed when building your website. 
