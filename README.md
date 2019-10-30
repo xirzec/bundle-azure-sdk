@@ -194,11 +194,61 @@ Now you are able to use this bundled output file inside an html page via a scrip
 
 ## Using Rollup
 
-### Rollup with JavaScript
+First, you need to install [rollup](https://rollupjs.org/) globally:
 
 ```
-TODO: example here
+npm install -g rollup
 ```
+
+Once this is done, you can use rollup by configuring your project in the way that rollup expects.
+
+### Rollup with JavaScript
+
+Rollup uses [browserslist](https://github.com/browserslist/browserslist) to configure what polyfills are needed when bundling. The Azure SDK uses some modern features of JavaScript, including [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), so let's edit `package.json` to target the latest version of three popular browsers:
+
+```json
+"browserslist": [
+    "last 1 Chrome version",
+    "last 1 Firefox version",
+    "last 1 Edge version"
+  ],
+```
+
+In order to use the AzureSDK inside JS, you need to import code from the package you installed earlier.
+
+To accomplish this, let's create two files, `index.js` and `index.html`:
+
+```js
+// index.js
+const { BlobServiceClient } = require("@azure/storage-blob");
+// Now do something interesting with BlobServiceClient :)
+```
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="./index.js"></script>
+</body>
+</html>
+```
+
+Now you are able to invoke parcel on the command-line:
+
+```
+parcel index.html
+```
+
+This will bundle your code and create a local development server for your page at `http://localhost:1234`. Changes you make to `index.js` will automatically get reflected on the dev server.
+
+If you wish to bundle your page without using the local development server, you can do this by passing the `build` command:
+
+```
+parcel build index.html
+```
+
+This will emit a compiled version of `index.html`, as well as any included script files, to the `dist` directory.
 
 ### Rollup with TypeScript
 
@@ -207,6 +257,14 @@ TODO: example here
 ```
 
 ## Using Parcel
+
+First, you need to install [parcel](https://parceljs.org/) globally:
+
+```
+npm install -g parcel-bundler
+```
+
+Once this is done, you can use parcel by configuring your project in the way that parcel expects.
 
 ### Parcel with Javascript
 
