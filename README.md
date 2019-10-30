@@ -70,16 +70,9 @@ The tag `@latest` means to install the last published stable version of the pack
 
 ## Choosing a bundler
 
-// some copy here on how to decide which bundler to use
+Below we show examples of using three fairly popular bundlers: [Webpack](https://webpack.js.org), [Rollup](https://rollupjs.org/), and [Parcel](https://parceljs.org/). The JavaScript ecosystem has a number of other bundlers available as well. Choosing a bundler for your library or application can be complex, but any will work for simple projects.
 
-#### Webpack
-
-
-#### Rollup
-
-
-#### Parcel
-
+Webpack is a popular option in the ecosystem today and has a large community following. Rollup tends to be better suited for libraries rather than web applications, and is the bundler used by the Azure SDK. Parcel is a newer bundler that offers a great getting started experience.
 
 
 ## Using Webpack
