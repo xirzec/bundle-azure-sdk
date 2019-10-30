@@ -177,11 +177,177 @@ Once this is done, you can use rollup by configuring your project in the way tha
 
 ### Rollup with JavaScript
 
+In order to use Azure SDK libraries inside JS, you need to import code from the package you installed earlier. Create `src/index.js` with the following content:
+
+```js
+// src/index.js
+const { BlobServiceClient } = require("@azure/storage-blob");
+// Now do something interesting with BlobServiceClient :)
+```
+
+Now we need to configure Rollup to take the above code and turn it into a bundle. Save the following `rollup.config.js` file next to your `package.json` file you created earlier:
+
+```js
+import resolve from "rollup-plugin-node-resolve";
+import cjs from "rollup-plugin-commonjs";
+import json from "rollup-plugin-json";
+import shim from "rollup-plugin-shim";
+
+export default {
+    input: "src/index.js",
+    output: {
+        file: "dist/bundle.js",
+        format: "iife",
+        name: "main"
+    },
+    plugins: [
+        shim({
+            fs: `
+          export function stat() { }
+          export function createReadStream() { }
+          export function createWriteStream() { }
+        `,
+            os: `
+          export const type = 1;
+          export const release = 1;
+        `,
+            util: `
+            export function promisify() { }
+        `
+        }),
+        resolve({
+            preferBuiltins: false,
+            mainFields: ["module", "browser"]
+        }),
+        cjs({
+            namedExports: {
+                events: ["EventEmitter"],
+            }
+        }),
+        json()
+    ]
+};
+```
+
+If you want to customize rollup's configuration file further, you can see [all supported options in their documentation](https://rollupjs.org/guide/en/#configuration-files).
+
+We also need to install the plugins we referenced in the above file:
+
+```
+npm install --save-dev rollup-plugin-node-resolve rollup-plugin-commonjs rollup-plugin-json rollup-plugin-shim
+```
+
+Now that we have our config file and necessary plugins installed, we can run rollup:
+
+```
+rollup --config
+```
+
+This will create a **bundled** version of your code along with the Azure SDK functionality your code depends on. It writes out the brower-compatible bundle to `dist/bundle.js` as configured above.
+
+Now you can use this bundle inside an html page via a script tag:
+
+```html
+<script src="./dist/main.js"></script>
+```
 
 ### Rollup with TypeScript
 
+First, you need to install [TypeScript](https://typescriptlang.org):
+
 ```
-TODO: example here
+npm install --save-dev typescript
+```
+
+Now let's create a very basic [tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file to configure TypeScript. If you've already configured TypeScript, you can skip this step. Save the following `tsconfig.json` file next to your `package.json` file you created earlier:
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "strict": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es6"
+  }
+}
+```
+
+Similar to our JS example above, let's create an `index.ts` file that imports from `@azure/storage-blob`:
+
+```ts
+// src/index.ts
+import { BlobServiceClient } from "@azure/storage-blob";
+// Now do something interesting with BlobServiceClient :)
+```
+
+Now we need to configure Rollup to take the above code and turn it into a bundle. Save the following `rollup.config.js` file next to your `package.json` file you created earlier:
+
+```js
+import resolve from "rollup-plugin-node-resolve";
+import cjs from "rollup-plugin-commonjs";
+import json from "rollup-plugin-json";
+import shim from "rollup-plugin-shim";
+import typescript from "rollup-plugin-typescript2";
+
+export default {
+    input: "src/index.ts",
+    output: {
+        file: "dist/bundle.js",
+        format: "iife",
+        name: "main"
+    },
+    plugins: [
+        shim({
+            fs: `
+          export function stat() { }
+          export function createReadStream() { }
+          export function createWriteStream() { }
+        `,
+            os: `
+          export const type = 1;
+          export const release = 1;
+        `,
+            util: `
+            export function promisify() { }
+        `
+        }),
+        resolve({
+            preferBuiltins: false,
+            mainFields: ["module", "browser"]
+        }),
+        cjs({
+            namedExports: {
+                events: ["EventEmitter"],
+            }
+        }),
+        json(),
+        typescript()
+    ]
+};
+```
+
+If you want to customize rollup's configuration file further, you can see [all supported options in their documentation](https://rollupjs.org/guide/en/#configuration-files).
+
+We also need to install the plugins we referenced in the above file:
+
+```
+npm install --save-dev rollup-plugin-node-resolve rollup-plugin-commonjs rollup-plugin-json rollup-plugin-shim rollup-plugin-typescript2
+```
+
+Now that we have our config file and necessary plugins installed, we can run rollup:
+
+```
+rollup --config
+```
+
+This will create a **bundled** version of your code along with the Azure SDK functionality your code depends on. It writes out the brower-compatible bundle to `dist/bundle.js` as configured above.
+
+Now you can use this bundled output file inside an html page via a script tag:
+
+```html
+<script src="./dist/bundle.js"></script>
 ```
 
 ## Using Parcel
