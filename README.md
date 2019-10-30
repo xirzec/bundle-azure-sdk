@@ -1,12 +1,8 @@
 # Bundling the Azure SDK for a browser
 
-This document is intended to provide concrete examples for using the Azure SDK inside a browser.
+To use Azure SDK libraries on a website, you need to format your code to work inside the browser. You do this using a tool called a **bundler**. This process takes JavaScript code written using Node.js conventions and converts it into a format that is understood browsers.
 
-The Azure SDK is published to [npm](https://npmjs.com) and usable inside the [Node.js runtime](https://nodejs.org/en/). 
-
-In order to use the SDK on a website, you will first need to make sure it is formatted to work inside the browser. You do this by a process referred to as **bundling**. This process takes JavaScript code written for Node.js and converts it into a format that be used in modern browsers.
-
-This document will walk you through all of the steps required in order to bundle the SDK for your website.
+This document will walk you through all of the steps required to bundl Azure SDK libraries for your website.
 
 ## Install prerequisites
 
