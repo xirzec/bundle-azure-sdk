@@ -1,12 +1,12 @@
-# Bundling the Azure SDK for a browser
+# Bundling Azure SDK libraries for a browser
 
-To use Azure SDK libraries on a website, you need to format your code to work inside the browser. You do this using a tool called a **bundler**. This process takes JavaScript code written using [Node.js](https://nodejs.org/) conventions and converts it into a format that is understood by browsers.
+To use Azure SDK libraries on a website, you need to convert your code to work inside the browser. You do this using a tool called a **bundler**. This process takes JavaScript code written using [Node.js](https://nodejs.org/) conventions and converts it into a format that is understood by browsers.
 
-This document will walk you through all of the steps required to bundle Azure SDK libraries for your website.
+This document will walk you through the steps required to bundle Azure SDK libraries for your website.
 
 ## Install prerequisites
 
-In order to use the Azure SDK, you will need to install some software onto your development machine.
+In order to install Azure SDK libraries, you will need to install Node.js and a bunlder of your choice onto your development machine.
 
 ### Node.js
 
@@ -26,18 +26,9 @@ The [Node Package Manager](https://npmjs.com) (npm) is included when you install
 npm --version
 ```
 
-npm is also able to upgrade itself:
-
-```
-npm install -g npm@latest
-```
-
-The `-g` flag installs packages globally on your development machine. We will use it when installing a bundler.
-
-
 ## Setting up your project
 
-First, let's make a new directory for your project, and change into it.
+If you already have a project with a package.json file set up, skip to the next section. If not, first let's make a new directory for your project, and change into it.
 
 ```
 mkdir example
@@ -52,24 +43,17 @@ npm --init
 
 Follow the prompts and npm will generate a starter [package.json](https://docs.npmjs.com/files/package.json) for you.
 
-Now we can install the Azure SDK. The Azure SDK is composed of many separate packages, but you can pick and choose which you need based on the services you intend to use.
+Now we can install Azure SDK packages. The Azure SDK is composed of many separate packages. You can pick and choose which you need based on the services you intend to use.
 
 For example, if you wish to use the Blob functionality provided by Azure's Storage service, you can install the `@azure/storage-blob` package:
 
 ```
-npm install --save-dev @azure/storage-blob@latest
+npm install --save @azure/storage-blob
 ```
-
-`--save-dev` is used to save the package as a "[dev dependency](https://docs.npmjs.com/files/package.json#devdependencies)", meaning it only needs to be installed when building your website. 
-
-The tag `@latest` means to install the last published stable version of the package. If you wanted to install the last published *preview* version, you can use `@next` instead.
 
 ## Choosing a bundler
 
-Below we show examples of using three fairly popular bundlers: [Webpack](https://webpack.js.org), [Rollup](https://rollupjs.org/), and [Parcel](https://parceljs.org/). The JavaScript ecosystem has a number of other bundlers available as well. Choosing a bundler for your library or application can be complex, but any will work for simple projects.
-
-Webpack is a popular option in the ecosystem today and has a large community following. Rollup tends to be better suited for libraries rather than web applications, and is the bundler used by the Azure SDK. Parcel is a newer bundler that offers a great getting started experience.
-
+Below we show examples of using three popular bundlers: [Webpack](https://webpack.js.org), [Rollup](https://rollupjs.org/), and [Parcel](https://parceljs.org/). The JavaScript ecosystem has a number of other bundlers available as well. Any bundler will likely work well for your project, but each has its own strengths and weaknesses you may wish to consider. If you haven't picked a bundler yet, Webpack is the most commonly used option.
 
 ## Using Webpack
 
@@ -83,23 +67,23 @@ Once this is done, you can use webpack by configuring your project in the way th
 
 ### Webpack with JavaScript
 
-In order to use the AzureSDK inside JS, you need to import code from the package you installed earlier. By default, Webpack will look for a file named `index.js` inside of a `src` folder from where it is run.
+In order to use Azure SDK libraries inside JS, you need to import code from the package you installed earlier. By default, Webpack will look for a file named `index.js` inside of a `src` folder from where it is run. Create `src/index.js` with the following content:
 
 ```js
-// src\index.js
+// src/index.js
 const { BlobServiceClient } = require("@azure/storage-blob");
 // Now do something interesting with BlobServiceClient :)
 ```
 
-Now you are able to invoke webpack on the command-line:
+Now invoke webpack on the command-line:
 
 ```
 webpack --mode=development
 ```
 
-This will create a **bundled** version of your code plus the Azure SDK functionality that your code depends on and write it out to a `dist` subfolder inside a file named `main.js` by default.
+This will create a **bundled** version of your code along with the Azure SDK functionality your code depends on. It writes out the brower-compatible bundle to `dist/main.js` by default.
 
-Now you are able to use this bundled output file inside an html page via a script tag:
+Now you can use this bundle inside an html page via a script tag:
 
 ```html
 <script src="./dist/main.js"></script>
@@ -116,7 +100,7 @@ First, you need to install [TypeScript](https://typescriptlang.org) and a [Webpa
 npm install --save-dev typescript ts-loader
 ```
 
-Now let's create a very basic [tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file to configure TypeScript:
+Now let's create a very basic [tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file to configure TypeScript. If you've already configured TypeScript, you can skip this step. Save the following `tsconfig.json` file next to your `package.json` file you created earlier:
 
 ```json
 {
@@ -131,12 +115,12 @@ Now let's create a very basic [tsconfig.json](https://www.typescriptlang.org/doc
 }
 ```
 
-For more information on using Webpack with TypeScript, check out the TypeScript guide in Webpack's documentation: https://webpack.js.org/guides/typescript/
+For more information on configuring TypeScript with Webpack, check out [Webpack's TypeScript guide](https://webpack.js.org/guides/typescript/).
 
 Similar to our JS example above, let's create an `index.ts` file that imports from `@azure/storage-blob`:
 
 ```ts
-// src\index.ts
+// src/index.ts
 import { BlobServiceClient } from "@azure/storage-blob";
 // Now do something interesting with BlobServiceClient :)
 ```
@@ -167,7 +151,7 @@ module.exports = {
 };
 ```
 
-Now you are able to invoke webpack on the command-line:
+Now you can invoke webpack on the command-line:
 
 ```
 webpack --mode=development
@@ -175,7 +159,7 @@ webpack --mode=development
 
 This will create a **bundled** version of your code plus the Azure SDK functionality that your code depends on and write it out to a `dist` subfolder inside a file named `bundle.js` (as configured in `webpack.config.js`.)
 
-Now you are able to use this bundled output file inside an html page via a script tag:
+Now you can use this bundled output file inside an html page via a script tag:
 
 ```html
 <script src="./dist/bundle.js"></script>
@@ -212,7 +196,7 @@ Once this is done, you can use parcel by configuring your project in the way tha
 
 ### Parcel with Javascript
 
-Parcel uses [browserslist](https://github.com/browserslist/browserslist) to configure what polyfills are needed when bundling. The Azure SDK uses some modern features of JavaScript, including [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), so let's edit `package.json` to target the latest version of three popular browsers:
+Parcel uses [browserslist](https://github.com/browserslist/browserslist) to configure what polyfills are needed when bundling. Azure SDK libraries generally target the ES2015 version of JavaScript and use some modern features of JavaScript, including [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*), so let's edit `package.json` to target the latest version of three popular browsers:
 
 ```json
 "browserslist": [
@@ -222,7 +206,7 @@ Parcel uses [browserslist](https://github.com/browserslist/browserslist) to conf
   ],
 ```
 
-In order to use the AzureSDK inside JS, you need to import code from the package you installed earlier.
+In order to use Azure SDK libraries inside JS, you need to import code from the package you installed earlier.
 
 To accomplish this, let's create two files, `index.js` and `index.html`:
 
@@ -242,7 +226,7 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 </html>
 ```
 
-Now you are able to invoke parcel on the command-line:
+Now you can invoke parcel on the command-line:
 
 ```
 parcel index.html
@@ -313,7 +297,7 @@ and also an `index.html` that references it:
 </html>
 ```
 
-Now you are able to invoke parcel on the command-line:
+Now you can invoke parcel on the command-line:
 
 ```
 parcel index.html
