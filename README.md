@@ -204,7 +204,26 @@ Once this is done, you can use rollup by configuring your project in the way tha
 
 ### Rollup with JavaScript
 
-Rollup uses [browserslist](https://github.com/browserslist/browserslist) to configure what polyfills are needed when bundling. The Azure SDK uses some modern features of JavaScript, including [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), so let's edit `package.json` to target the latest version of three popular browsers:
+
+### Rollup with TypeScript
+
+```
+TODO: example here
+```
+
+## Using Parcel
+
+First, you need to install [parcel](https://parceljs.org/) globally:
+
+```
+npm install -g parcel-bundler
+```
+
+Once this is done, you can use parcel by configuring your project in the way that parcel expects.
+
+### Parcel with Javascript
+
+Parcel uses [browserslist](https://github.com/browserslist/browserslist) to configure what polyfills are needed when bundling. The Azure SDK uses some modern features of JavaScript, including [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), so let's edit `package.json` to target the latest version of three popular browsers:
 
 ```json
 "browserslist": [
@@ -249,28 +268,6 @@ parcel build index.html
 ```
 
 This will emit a compiled version of `index.html`, as well as any included script files, to the `dist` directory.
-
-### Rollup with TypeScript
-
-```
-TODO: example here
-```
-
-## Using Parcel
-
-First, you need to install [parcel](https://parceljs.org/) globally:
-
-```
-npm install -g parcel-bundler
-```
-
-Once this is done, you can use parcel by configuring your project in the way that parcel expects.
-
-### Parcel with Javascript
-
-```
-TODO: example here
-```
 
 ### Parcel with TypeScript
 
