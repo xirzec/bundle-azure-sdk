@@ -271,6 +271,71 @@ This will emit a compiled version of `index.html`, as well as any included scrip
 
 ### Parcel with TypeScript
 
+Parcel uses [browserslist](https://github.com/browserslist/browserslist) to configure what polyfills are needed when bundling. The Azure SDK uses some modern features of JavaScript, including [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), so let's edit `package.json` to target the latest version of three popular browsers:
+
+```json
+"browserslist": [
+    "last 1 Chrome version",
+    "last 1 Firefox version",
+    "last 1 Edge version"
+  ],
 ```
-TODO: example here
+
+Next, you need to install [TypeScript](https://typescriptlang.org):
+
 ```
+npm install --save-dev typescript
+```
+
+Now let's create a very basic [tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file to configure TypeScript:
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "strict": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es2017"
+  }
+}
+```
+
+For more information on using Parcel with TypeScript, check out the TypeScript guide in Parcel's documentation: https://parceljs.org/typeScript.html
+
+Similar to our JS example above, let's create an `index.ts` file that imports from `@azure/storage-blob`:
+
+```ts
+// index.ts
+import { BlobServiceClient } from "@azure/storage-blob";
+// Now do something interesting with BlobServiceClient :)
+```
+
+and also an `index.html` that references it:
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="./index.ts"></script>
+</body>
+</html>
+```
+
+Now you are able to invoke parcel on the command-line:
+
+```
+parcel index.html
+```
+
+This will bundle your code and create a local development server for your page at `http://localhost:1234`. Changes you make to `index.js` will automatically get reflected on the dev server.
+
+If you wish to bundle your page without using the local development server, you can do this by passing the `build` command:
+
+```
+parcel build index.html
+```
+
+This will emit a compiled version of `index.html`, as well as any included script files, to the `dist` directory.
