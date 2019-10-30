@@ -2,7 +2,7 @@
 
 To use Azure SDK libraries on a website, you need to format your code to work inside the browser. You do this using a tool called a **bundler**. This process takes JavaScript code written using Node.js conventions and converts it into a format that is understood browsers.
 
-This document will walk you through all of the steps required to bundl Azure SDK libraries for your website.
+This document will walk you through all of the steps required to bundle Azure SDK libraries for your website.
 
 ## Install prerequisites
 
